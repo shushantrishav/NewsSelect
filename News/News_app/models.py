@@ -6,4 +6,5 @@ class Article(models.Model):
     text = models.TextField()
     date = models.TextField()
     time = models.TextField()
-    read_more_url = models.URLField()
+    read_more_url = models.URLField() 
+    publisher_slug = models.CharField(max_length=100, blank=True, null=True)

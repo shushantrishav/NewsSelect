@@ -1,62 +1,85 @@
+// JavaScript for mobile navigation toggle (myFunction)
+// This function will toggle a 'responsive' class on the #myTopnav ul
 function myFunction() {
-	var x = document.getElementById("myTopnav");
-	if (x.className === "topnav") {
-	  x.className += " responsive";
-	} else {
-	  x.className = "topnav";
-	}
-  }
-  var checkList = document.getElementById("list1");
-  checkList.getElementsByClassName("anchor")[0].onclick = function (evt) {
-	if (checkList.classList.contains("visible"))
-	  checkList.classList.remove("visible");
-	else checkList.classList.add("visible");
-  };
-  // Get the checkbox input elements
-  var checkboxes = document.querySelectorAll(
-	"#filter-options input[type='checkbox']"
-  );
-  
-  // Get all the anchor tags in the content
-  var anchors = document.querySelectorAll("#content a");
-  
-  // Add event listener to the checkboxes
-  for (var i = 0; i < checkboxes.length; i++) {
-	checkboxes[i].addEventListener("change", function () {
-	  // Get the checked options
-	  var checkedOptions = [];
-	  for (var j = 0; j < checkboxes.length; j++) {
-		if (checkboxes[j].checked) {
-		  checkedOptions.push(checkboxes[j].value.toLowerCase());
-		}
-	  }
-  
-	  // Loop through all the anchor tags
-	  for (var k = 0; k < anchors.length; k++) {
-		// Get the href attribute value and convert to lowercase
-		var href = anchors[k].getAttribute("href").toLowerCase();
-  
-		// Check if the href contains any of the checked options
-		var matchFound = false;
-		for (var l = 0; l < checkedOptions.length; l++) {
-		  if (href.indexOf(checkedOptions[l]) !== -1) {
-			matchFound = true;
-			break;
-		  }
-		}
-  
-		// Show or hide the anchor tag based on the checked options
-		if (checkedOptions.length === 0 || matchFound) {
-		  anchors[k].parentNode.style.display = "";
-		} else {
-		  anchors[k].parentNode.style.display = "none";
-		}
-	  }
-	});
-  }
-  var list1 = document.getElementById("list1");
-  window.addEventListener('scroll', function() {
-	if (window.scrollY > 0) {
-	  list1.classList.remove('visible');
-	}
-  });
+    var x = document.getElementById("myTopnav");
+    // Ensure the initial class is 'topnav' for this logic to work as written in the snippet
+    // In your index.html, it's just 'flex flex-col md:flex-row ...' initially
+    // So, we'll adapt it to use classList.contains as in your original, more robust script.js
+    if (x.classList.contains("responsive")) {
+        x.classList.remove("responsive");
+    } else {
+        x.classList.add("responsive");
+    }
+}
+
+// JavaScript for publisher filter dropdown visibility toggle
+var checkList = document.getElementById('list1');
+// Toggle 'visible' class when the 'anchor' (dropdown header) is clicked
+checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+    if (checkList.classList.contains('visible')) {
+        checkList.classList.remove('visible');
+    } else {
+        checkList.classList.add('visible');
+    }
+    evt.preventDefault(); // Prevent default link behavior
+};
+
+// *** CORRECTED NEWS FILTERING LOGIC ***
+const publisherCheckboxes = document.querySelectorAll('#filter-options input[type="checkbox"]');
+const newsCards = document.querySelectorAll('.news-card'); // Selects the actual news card divs
+const noNewsMessage = document.getElementById('no-news-message');
+
+// Function to filter news cards based on selected publishers
+function filterNewsCards() {
+    const selectedPublishers = Array.from(publisherCheckboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value.toLowerCase()); // Ensure lowercase for consistent matching
+
+    let visibleCardCount = 0; // Counter for visible news cards
+
+    newsCards.forEach(card => {
+        const cardPublisher = card.getAttribute('data-publisher'); // Get publisher from data-publisher attribute
+
+        // If no publishers are selected OR the card's publisher is in the selected list
+        if (selectedPublishers.length === 0 || selectedPublishers.includes(cardPublisher)) {
+            card.style.display = 'flex'; // Show the card
+            visibleCardCount++;
+        } else {
+            card.style.display = 'none'; // Hide the card
+        }
+    });
+
+    // Show or hide the 'no news found' message based on visible cards
+    if (visibleCardCount === 0) {
+        noNewsMessage.classList.remove('hidden'); // Make it visible
+        // Removed: noNewsMessage.style.display = 'block'; // Rely on Tailwind's 'hidden' class
+    } else {
+        noNewsMessage.classList.add('hidden'); // Hide it
+        // Removed: noNewsMessage.style.display = 'none'; // Rely on Tailwind's 'hidden' class
+    }
+}
+
+// Add event listeners to each publisher checkbox to trigger filtering on change
+publisherCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', filterNewsCards);
+});
+
+// Run the filter once when the page loads, useful if Django pre-checks some boxes
+document.addEventListener('DOMContentLoaded', filterNewsCards);
+
+// Optional: Keep the title animation if you want it
+var title = "NewsSelect | Where news meets convenience.    ";
+var speed = 500;
+var position = 0;
+function animateTitle() {
+    document.title = title.substring(position) + title.substring(0, position);
+    position++;
+    if (position > title.length) {
+        position = 0;
+    }
+    setTimeout(animateTitle, speed);
+}
+animateTitle();
+
+// Removed: The 'scroll' event listener that hides the dropdown, as it's generally not desired.
+// If you specifically want the dropdown to close on scroll, you can re-add it.
