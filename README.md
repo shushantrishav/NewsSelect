@@ -1,4 +1,8 @@
 # 🚀 NewsSelect — AI-Powered News Summarization App
+### 📌 Demo & Code
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-28a745?style=for-the-badge&logo=vercel&logoColor=white)](https://shushantrishav.pythonanywhere.com/news/)
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-181717?logo=github&style=for-the-badge)](https://github.com/shushantrishav/NewsSelect)
 
 An end-to-end, AI-powered web application for real-time, abstractive news summarization using a Seq2Seq LSTM model with Attention — integrated with Django backend, web scraping for live news, and a responsive frontend UI.
 
@@ -152,3 +156,7 @@ In the digital age, readers face information overload from countless news source
 - 🗞️ Extend to additional content categories (sports, finance, health).
 
 ---
+### 📌 Demo & Code
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-28a745?style=for-the-badge&logo=vercel&logoColor=white)](https://shushantrishav.pythonanywhere.com/news/)
+[![View on GitHub](https://img.shields.io/badge/View%20on-GitHub-181717?logo=github&style=for-the-badge)](https://github.com/shushantrishav/NewsSelect)
